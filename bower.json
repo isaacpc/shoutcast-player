@@ -1,0 +1,32 @@
+{
+  "name": "shoutcast-player",
+  "version": "1.0.0",
+  "description": "A shoutcast platorm player component",
+  "authors": [
+    "Isaac Palomino"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "shoutcast",
+    "player",
+    "audio"
+  ],
+  "main": "shoutcast-player.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "moment": "^2.15.2",
+    "paper-slider": "PolymerElements/paper-slider#^1.0.0",
+    "iron-image": "PolymerElements/iron-image#^1.2.5",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.0",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.1.0",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.0",
+    "google-web-components": "^1.1.1"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}

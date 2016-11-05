@@ -1,0 +1,394 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
+<link rel="import" href="../iron-icons/av-icons.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../paper-slider/paper-slider.html">
+<link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="behavior/string-behavior.html">
+<script src="../moment/min/moment.min.js"></script>
+<script src="../moment/locale/es.js"></script>
+
+/**
+* 12,1,177,999,11,48,20161027 ROCK STAR DARDEM:
+
+289,1,576,30000,286,128,idobi - idobi 120
+Meta Data description
+It is worth to be noted what each element of this string represents.
+The first number, in our case 254, is the number of current listeners.
+The second number is the stream status. It is 1 when a source is connected and 0 when there is no source. If there is no source then no client connections occur.
+The third number, in our case 576, is the maximum number of listeners happened for this stream.
+The next number (3000) is the maximum number of client connections allowed in total o the server.
+The fifth number (252) represents the unique client connections across all active streams so if one client is on 2 streams, this will only be counted as one unique client.
+The sixth number (128) is the current bitrate and,
+at the end, is the current song’s artist-title.
+*/
+
+<dom-module id="shoutcast-player">
+  <template>
+  <style>
+  :host {
+    width: 100%;
+    background-color: #f87f6f;
+  }
+
+  .self-start {
+    -ms-align-self: flex-start;
+    -webkit-align-self: flex-start;
+    align-self: flex-start;
+  }
+
+  .self-end {
+    -ms-align-self: flex-end;
+    -webkit-align-self: flex-end;
+  }
+
+  iron-icon {
+    --iron-icon-height: 32px;
+    --iron-icon-width: 32px;
+    --iron-icon-fill-color: #FFF;
+    cursor: pointer;
+  }
+
+  .flex-horizontal {
+    @apply(--layout-horizontal);
+  }
+  .flexchild {
+    @apply(--layout-flex);
+  }
+
+  .flex-vertical {
+    @apply(--layout-vertical);
+    height: 220px;
+  }
+  .flexchild-vertical {
+    @apply(--layout-flex);
+  }
+
+  .flex-center-justified {
+    @apply(--layout-horizontal);
+    @apply(--layout-center-justified);
+  }
+
+
+  paper-slider {
+    width: 100%;
+
+  }
+
+  .image-container {
+    width: 100px;
+    margin-right: 10px;
+    border: 1px solid #777474;
+  }
+
+  iron-image{
+    --iron-image-width: 100%;
+    --iron-image-height:	100%;
+  }
+
+  #listContainer {
+    background-color:#fafafa;
+    color: #666;
+  }
+
+  #listContainer ul {
+    background-color:
+    #fafafa;list-style: none;
+    padding:0px;
+    margin: 0px;
+  }
+
+  #listContainer li {
+    padding:8px;
+    margin-bottom: 2px;
+  }
+
+  #listContainer li.even {
+    background: green;
+  }
+
+  #listContainer li.odd {
+    background: red;
+  }
+
+  #listContainer .title {
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:70%;
+    display:inline-block;
+  }
+
+  #listContainer .time {
+    float:right;
+    font-size: 10px;
+    color: #888;
+    white-space:nowrap;
+    overflow:visible;
+  }
+
+  ul li:nth-child(even){
+      background-color: rgba(239, 239, 239, 0.63);
+  }
+
+  /*ul li:nth-child(odd){
+    background-color: #efefef;
+}*/
+
+  .controls-decorator {
+    background-color: #595959;
+    margin-bottom: 30px;
+    padding: 10px 5px 10px 5px;
+  }
+
+  .radio-now .title {
+    font-size: 16px;
+  }
+
+  .radio-container {
+    background-color: #2956cb;
+    color: #EEE;
+    margin-bottom: 10px;
+  }
+
+  .current-song {
+    padding-right: 4px;
+  }
+
+  </style>
+
+
+  <iron-ajax id="ajax"
+  auto
+  url="{{src}}/7.html"
+  on-response="_onMetaDataRetrieved"
+  handle-as="html">
+</iron-ajax>
+
+<iron-ajax id="ajax"
+auto
+url="{{src}}/played.html"
+on-response="_onSongListRetrieved"
+handle-as="html">
+</iron-ajax>
+
+<audio id="audio" src="{{src}}/;stream.mp3"></audio>
+
+<div  class="container flex-vertical">
+  <div class="radio-container">
+    <div class="container flex-vertical">
+      <div class="controls-decorator">
+        <div class="container flex-horizontal">
+          <div>
+            <div id="left" class="self-start" on-click="playPause">
+              <iron-icon id="play"
+              class="fit"
+              icon="av:play-arrow"
+              hidden$="{{ isPlaying }}"></iron-icon>
+
+              <iron-icon id="pause"
+              class="fit"
+              icon="av:stop"
+              hidden$="{{ !isPlaying }}"></iron-icon>
+            </div>
+          </div>
+          <div class="flexchild">
+            <paper-slider id="volumenSlider"
+            min="0"
+            max="1"
+            value="{{sliderVolume}}"
+            step="0.01"
+            on-value-change="_onVolumeChange"></paper-slider>
+          </div>
+          <div>
+            <div id="volumeButton" on-click="loudAndMute">
+              <iron-icon id="loudness"
+              class="fit"
+              icon="av:volume-up"
+              hidden$="{{ !hasLoudness }}"></iron-icon>
+              <iron-icon id="mute"
+              class="fit"
+              icon="av:volume-off"
+              hidden$="{{ hasLoudness }}"></iron-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flexchild-vertical radio-now" >
+        <div class="container flex-horizontal">
+          <div>
+            <div class="image-container">
+              <iron-image src="images/default_show.jpg"></iron-image>
+            </div>
+          </div>
+          <div class="flexchild current-song">
+            <span>Estás escuchando, desde hace {{ currentSong.start }}:</span>
+            <p><span class="title">{{ currentSong.song }}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div style="margin-bottom: 10px;">Programas anteriores:</div>
+    <div id="listContainer" class="playlistContainer">
+      <ul id="playListContainer">
+        <template is="dom-repeat" items="{{songHistory}}">
+          <li><span class="title truncate">{{item.song}}</span><span class="time">{{item.start}}</span></li>
+        </template>
+      </ul>
+    </div>
+  </div>
+</div>
+</template>
+
+<script>
+Polymer({
+  is: 'shoutcast-player',
+  behaviors: [StringBehavior],
+
+  properties: {
+    src: {
+      type: String
+    },
+    metaData: {
+      type: Object
+    },
+
+    songHistory: {
+      type: Array
+    },
+
+    currentSong: {
+      type: String,
+      value: 'www.mariskalrock.com',
+      computed: '_getCurrentSong(songHistory)'
+    },
+
+    title: String,
+
+    isPlaying: {
+      type: Boolean,
+      value: false
+    },
+
+    hasLoudness: {
+      type: Boolean,
+      value: true
+    },
+
+    sliderVolume: {
+      type: Number,
+      value: 0.75
+    }
+  },
+
+  ready: function () {
+    moment.locale('es');
+
+  },
+
+  playPause: function(e) {
+    e.preventDefault();
+
+    var player = this;
+
+    if ( player.$.audio.paused ) {
+      player.$.audio.play();
+      player.isPlaying = true;
+    } else {
+      player.$.audio.pause();
+      player.isPlaying = false;
+    }
+  },
+
+  loudAndMute: function(e) {
+    e.preventDefault();
+
+    if ( !this.hasLoudness ) {
+      this.$.audio.volume = this.$.volumenSlider.value;
+      this.hasLoudness = true;
+    } else {
+      this.$.audio.volume = 0;
+      this.hasLoudness = false;
+    }
+  },
+
+  _onVolumeChange: function (v) {
+    this.$.audio.volume = this.$.volumenSlider.value;
+    this.hasLoudness = !(this.$.volumenSlider.value === 0);
+  },
+
+  _onMetaDataRetrieved: function (response) {
+    var params = response.detail.response.match(/<body[^>]*>([\w|\W]*)<\/body>/im);
+    this._parseMetaData(params[1]);
+  },
+
+  _parseMetaData: function (data) {
+    var parsedData = (data || '').split(',');
+    this.metaData = {
+      concurrentListeners: parsedData[0],
+      streamStatus: parsedData[1],
+      maxListenersStream: parsedData[2],
+      maxClientConnectionsAllowed: parsedData[3],
+      uniqueClientConnections: parsedData[4],
+      currentBitRate: parsedData[5],
+      song: parsedData[6]
+    };
+  },
+
+  _onSongListRetrieved: function (response){
+    var el = document.createElement( 'html' );
+    var rows = undefined;
+    var cols = undefined;
+    var i = 1;
+    var rowsLength = undefined;
+    var result = [];
+
+    this.songHistory = [];
+
+    el.innerHTML = response.detail.response;
+    rows = el.getElementsByTagName('table')[2].getElementsByTagName('tr')
+    rowsLength = rows.length;
+
+    for (i; i < rowsLength;i++){
+      cols = rows[i].getElementsByTagName('td');
+      result.push({
+        start: this._formatTime(cols[0].innerHTML),
+        song: this.cleanString(cols[1].innerHTML),
+        now: !!cols[2]
+      });
+    }
+    this.songHistory = result;
+  },
+
+  _formatTime: function (time) {
+    var formatedTime =  new moment(time, 'HH:mm:ss');
+    return formatedTime.fromNow();
+  },
+
+  _getCurrentSong:function (list) {
+    var result;
+    var found = false;
+    var i = 0;
+    var item;
+    var listLength = list ? list.length :  [];
+
+    for (i; i < listLength && !found ; i++) {
+      item = list[i];
+
+      if(item.now) {
+        found = true;
+        result = item;
+      }
+    }
+    return result;
+  },
+
+  _getClass: function(item) {
+    return (item % 2 === 0)? 'even': 'odd';
+  }
+});
+</script>
+</dom-module>

@@ -1,0 +1,25 @@
+<script>
+  var StringBehavior = {
+    /**
+     * removes initial space. Workaround because data feed response.
+     * @param  {[type]} string [description]
+     * @return {[type]}        [description]
+     */
+    removeInitialWhiteSpace: function(string) {
+      return (string || '').startsWith('&#160;')? string.substring(6) : string;
+    },
+    replaceHTMLChars: function (string) {
+      string = string.replace(/&#8216;|&#8217;/g, '\'');
+      string = string.replace(/&#8220;/g, '¡');
+      string = string.replace(/&#8221;/g, '!');
+      string = string.replace(/&#8230;/g, '...');
+      string = string.replace(/&amp;/g, '&');
+      return string;
+    },
+    cleanString: function(string) {
+      string = this.removeInitialWhiteSpace(string);
+      string = this.replaceHTMLChars(string);
+      return string;
+    }
+  };
+</script>
