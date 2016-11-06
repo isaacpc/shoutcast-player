@@ -1,16 +1,18 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 <link rel="import" href="../iron-icons/av-icons.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="../paper-slider/paper-slider.html">
 <link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="behavior/string-behavior.html">
-<script src="../moment/min/moment.min.js"></script>
+
+<script src="../webcomponentsjs/webcomponents-lite.js"></script>
+
+<script src="../moment/moment.js"></script>
 <script src="../moment/locale/es.js"></script>
 
 /**
-* 12,1,177,999,11,48,20161027 ROCK STAR DARDEM:
+* 12,1,177,999,11,48,SHOW NAME:
 
 289,1,576,30000,286,128,idobi - idobi 120
 Meta Data description
@@ -182,14 +184,9 @@ handle-as="html">
         <div class="container flex-horizontal">
           <div>
             <div id="left" class="self-start" on-click="playPause">
-              <iron-icon id="play"
-              class="fit"
-              icon="av:play-arrow"
+              <iron-icon id="play" icon="av:play-arrow"
               hidden$="{{ isPlaying }}"></iron-icon>
-
-              <iron-icon id="pause"
-              class="fit"
-              icon="av:stop"
+              <iron-icon id="pause" icon="av:stop"
               hidden$="{{ !isPlaying }}"></iron-icon>
             </div>
           </div>
@@ -203,13 +200,9 @@ handle-as="html">
           </div>
           <div>
             <div id="volumeButton" on-click="loudAndMute">
-              <iron-icon id="loudness"
-              class="fit"
-              icon="av:volume-up"
+              <iron-icon id="loudness" icon="av:volume-up"
               hidden$="{{ !hasLoudness }}"></iron-icon>
-              <iron-icon id="mute"
-              class="fit"
-              icon="av:volume-off"
+              <iron-icon id="mute"  icon="av:volume-off"
               hidden$="{{ hasLoudness }}"></iron-icon>
             </div>
           </div>
