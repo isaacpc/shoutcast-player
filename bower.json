@@ -15,11 +15,11 @@
   "main": "shoutcast-player.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
-    "moment": "^2.15.2",
     "paper-slider": "PolymerElements/paper-slider#^1.0.0",
     "iron-image": "PolymerElements/iron-image#^1.2.5",
     "iron-icon": "PolymerElements/iron-icon#^1.0.0",
-    "iron-ajax": "PolymerElements/iron-ajax#^1.4.0"
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.0",
+    "moment-element": "^0.4.3"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

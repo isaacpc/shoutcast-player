@@ -5,11 +5,10 @@
 <link rel="import" href="../paper-slider/paper-slider.html">
 <link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="behavior/string-behavior.html">
+<link rel="import" href="../moment-element/moment-element.html">
+<link rel="import" href="../moment-element/moment-with-locales-import.html">
 
 <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-
-<script src="../moment/moment.js"></script>
-<script src="../moment/locale/es.js"></script>
 
 /**
 * 12,1,177,999,11,48,SHOW NAME:
@@ -31,7 +30,7 @@ at the end, is the current song’s artist-title.
   <style>
   :host {
     width: 100%;
-    background-color: #f87f6f;
+    /*background-color: #f87f6f;*/
   }
 
   .self-start {
@@ -46,9 +45,9 @@ at the end, is the current song’s artist-title.
   }
 
   iron-icon {
-    --iron-icon-height: 32px;
-    --iron-icon-width: 32px;
-    --iron-icon-fill-color: #FFF;
+    /*--iron-icon-height: 32px;
+    --iron-icon-width: 32px;*/
+    --iron-icon-fill-color: #fff;
     cursor: pointer;
   }
 
@@ -61,8 +60,8 @@ at the end, is the current song’s artist-title.
 
   .flex-vertical {
     @apply(--layout-vertical);
-    height: 220px;
   }
+
   .flexchild-vertical {
     @apply(--layout-flex);
   }
@@ -72,21 +71,20 @@ at the end, is the current song’s artist-title.
     @apply(--layout-center-justified);
   }
 
-
   paper-slider {
     width: 100%;
-
   }
 
   .image-container {
     width: 100px;
     margin-right: 10px;
-    border: 1px solid #777474;
+    
   }
 
   iron-image{
     --iron-image-width: 100%;
     --iron-image-height:	100%;
+    padding:10px;
   }
 
   #listContainer {
@@ -95,23 +93,18 @@ at the end, is the current song’s artist-title.
   }
 
   #listContainer ul {
-    background-color:
-    #fafafa;list-style: none;
+    background-color: #fafafa;
+    list-style: none;
     padding:0px;
     margin: 0px;
+    font-size: 11px;
   }
 
   #listContainer li {
     padding:8px;
     margin-bottom: 2px;
-  }
-
-  #listContainer li.even {
-    background: green;
-  }
-
-  #listContainer li.odd {
-    background: red;
+    display: flex;
+    justify-content: space-between;
   }
 
   #listContainer .title {
@@ -123,7 +116,6 @@ at the end, is the current song’s artist-title.
   }
 
   #listContainer .time {
-    float:right;
     font-size: 10px;
     color: #888;
     white-space:nowrap;
@@ -133,10 +125,6 @@ at the end, is the current song’s artist-title.
   ul li:nth-child(even){
       background-color: rgba(239, 239, 239, 0.63);
   }
-
-  /*ul li:nth-child(odd){
-    background-color: #efefef;
-}*/
 
   .controls-decorator {
     background-color: #595959;
