@@ -192,7 +192,7 @@ handle-as="html">
     </div>
   </div>
   <div class="flexchild-vertical">
-    <iron-image src="images/default_show.jpg"></iron-image>
+    <iron-image src="[[cover]]"></iron-image>
   </div>
   <div class="current-song-container">
     <paper-item>
@@ -224,6 +224,10 @@ Polymer({
     src: {
       type: String
     },
+    cover: {
+      type: String
+    },
+
     metaData: {
       type: Object
     },
