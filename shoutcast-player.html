@@ -98,7 +98,6 @@
   }
 
   #listContainer .time {
-    font-size: 10px;
     color: #888;
     white-space:nowrap;
     overflow:visible;
@@ -122,8 +121,6 @@
   .controls-decorator .container button {
      max-width: 50%;
   }
-
-
   .radio-now .title {
     font-size: 16px;
   }
@@ -156,18 +153,19 @@
 
   </style>
 
-
   <iron-ajax id="ajax"
   auto
   url="{{src}}/7.html"
   on-response="_onMetaDataRetrieved"
+  last-response="_onMetaDataError"
   handle-as="html">
 </iron-ajax>
 
 <iron-ajax id="ajax"
 auto
-url="{{src}}/played.html"
+url="{{src}}/playeda.html"
 on-response="_onSongListRetrieved"
+last-response="_onSongListError"
 handle-as="html">
 </iron-ajax>
 
@@ -301,6 +299,10 @@ Polymer({
     this._parseMetaData(params[1]);
   },
 
+  _onMetaDataError: function() {
+    console.log("_onMetaDataError");
+  },
+
   _parseMetaData: function (data) {
     var parsedData = (data || '').split(',');
     this.metaData = {
@@ -325,21 +327,30 @@ Polymer({
     this.songHistory = [];
 
     el.innerHTML = response.detail.response;
-    rows = el.getElementsByTagName('table')[2].getElementsByTagName('tr')
-    rowsLength = rows.length;
 
-    for (i; i < rowsLength;i++){
-      cols = rows[i].getElementsByTagName('td');
-      result.push({
-        start: this._formatTime(cols[0].innerHTML),
-        song: this.cleanString(cols[1].innerHTML),
-        now: !!cols[2]
-      });
+    if(el.getElementsByTagName('table').length < 3){
+      this._onSongListError();
+    } else {
+      rows = el.getElementsByTagName('table')[2].getElementsByTagName('tr')
+      rowsLength = rows.length;
+
+      for (i; i < rowsLength;i++){
+        cols = rows[i].getElementsByTagName('td');
+        result.push({
+          start: this._formatTime(cols[0].innerHTML),
+          song: this.cleanString(cols[1].innerHTML),
+          now: !!cols[2]
+        });
+      }
+      this.songHistory = result;
+      
+      this.currentSong = this.songHistory[0];
+      this.songHistory.shift();
     }
-    this.songHistory = result;
-    
-    this.currentSong = this.songHistory[0];
-    this.songHistory.shift();
+  },
+
+  _onSongListError: function (response){
+    console.log("error");
   },
 
   _formatTime: function (time) {
