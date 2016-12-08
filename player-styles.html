@@ -1,0 +1,156 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../paper-styles/shadow.html">
+
+<dom-module id="player-styles">
+  <template>
+    <style>
+
+      body {
+        font-family: 'Roboto', 'Noto', sans-serif;
+        font-size: 14px;
+        margin: 0;
+        padding: 24px;
+        background-color: var(--paper-grey-50);
+      }
+
+      .self-start {
+        -ms-align-self: flex-start;
+        -webkit-align-self: flex-start;
+        align-self: flex-start;
+      }
+      
+      .self-end {
+        -ms-align-self: flex-end;
+        -webkit-align-self: flex-end;
+        align-self: flex-end;
+      }
+      
+      iron-icon {
+        cursor: pointer;
+      }
+      
+      .flex-horizontal {
+        @apply(--layout-horizontal);
+      }
+      
+      .flexchild {
+        @apply(--layout-flex);
+      }
+      
+      .flex-vertical {
+        @apply(--layout-vertical);
+      }
+      
+      .flexchild-vertical {
+        @apply(--layout-flex);
+      }
+      
+      .flex-center-justified {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+      }
+      
+      paper-slider {
+        width: 100%;
+      }
+      
+      .image-container {
+        width: 100px;
+        margin-right: 10px;
+      }
+      
+      iron-image {
+        --iron-image-width: 100%;
+        --iron-image-height: 100%;
+        padding: 10px;
+      }
+      
+      #listContainer {
+        background-color: #fafafa;
+        color: #666;
+      }
+      
+      #listContainer ul {
+        background-color: #fafafa;
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+        font-size: 0.8rem;
+      }
+      
+      #listContainer li {
+        padding: 8px;
+        margin-bottom: 2px;
+        display: flex;
+        justify-content: space-between;
+      }
+      
+      #listContainer .title {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 70%;
+        display: inline-block;
+      }
+      
+      #listContainer .time {
+        color: #888;
+        white-space: nowrap;
+        overflow: visible;
+      }
+      
+      ul li:nth-child(even) {
+        background-color: rgba(239, 239, 239, 0.63);
+      }
+      
+      .controls-decorator {
+        background-color: var(--paper-grey-200);
+        padding: 0.2rem;
+      }
+      
+      .controls-decorator .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .controls-decorator .container button {
+        max-width: 50%;
+      }
+      
+      .radio-now .title {
+        font-size: 1.6rem;
+      }
+      
+      .radio-container {
+        background-color: #2956cb;
+        color: #EEE;
+        margin-bottom: 10px;
+      }
+      
+      .current-song-container {
+        background-color: var(--paper-grey-200);
+        padding: 0.6rem;
+      }
+      
+      .current-song-container .title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 1.2rem;
+      }
+      
+      .current-song-container .subtitle {
+        color: var(--paper-grey-500);
+      }
+      
+      .history-list {
+        margin: 1.2rem 0 0.4rem 0;
+        color: var(--paper-grey-500);
+      }
+    </style>
+  </template>
+</dom-module>

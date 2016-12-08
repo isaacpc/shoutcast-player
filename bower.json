@@ -1,6 +1,6 @@
 {
   "name": "shoutcast-player",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A shoutcast platorm player component",
   "authors": [
     "Isaac Palomino"

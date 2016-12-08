@@ -1,0 +1,117 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icons/av-icons.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="./behavior/string-behavior.html">
+<link rel="import" href="./behavior/time-behavior.html">
+<link rel="import" href="../moment-element/moment-element.html">
+<link rel="import" href="../moment-element/moment-with-locales-import.html">
+<link rel="import" href="player-styles.html">
+
+<script src="../webcomponentsjs/webcomponents-lite.js"></script>
+
+<dom-module id="songs-list">
+  <template>
+   <style is="custom-style" include="player-styles">
+  :host {
+    width: 100%;
+  }
+
+  .error {
+    color: var(--paper-red-500);
+    text-align: center;
+    display:flex;
+    justify-content:center;
+    align-items: center;
+  }
+  
+  .hide {
+    display: none;
+  }
+  </style>
+
+<iron-ajax id="ajax" auto url="{{src}}/played.html" on-response="_onSongListRetrieved" last-response="_onSongListError" handle-as="html">
+</iron-ajax>
+
+  <div id="list" >
+    <div class="history-list">Programas anteriores:</div>
+    <div id="listContainer" class="playlistContainer">
+      <ul id="playListContainer">
+        
+        <template is="dom-repeat" items="[[songHistory]]">
+          <li><span class="title truncate">[[item.song]]</span><span class="time">[[item.start]]</span></li>
+        </template>
+      </ul>
+    </div>
+  </div>  
+  <div id="message" class="hide">
+    <p class="error">No se ha podido obtener la lista de programas.</p>
+  </div>
+</template>
+
+<script>
+Polymer({
+  is: 'songs-list',
+  behaviors: [StringBehavior, TimeBehavior],
+
+  properties: {
+    src: {
+      type: String
+    },
+    currentSong: {
+      type: Object,
+      notify:true
+    },
+    retrievedOk: Boolean,
+
+    songHistory: {
+      type: Array
+    }
+  },
+
+  ready: function () {
+    moment.locale('es');
+  },
+
+  _onSongListRetrieved: function (response){
+    var el = document.createElement( 'html' );
+    var rows = undefined;
+    var cols = undefined;
+    var i = 1;
+    var rowsLength = undefined;
+    var result = [];
+
+    this.songHistory = [];
+
+    el.innerHTML = response.detail.response;
+
+    if(el.getElementsByTagName('table').length < 3){
+      this._onSongListError();
+    } else {
+      rows = el.getElementsByTagName('table')[2].getElementsByTagName('tr')
+      rowsLength = rows.length;
+
+      for (i; i < rowsLength;i++){
+        cols = rows[i].getElementsByTagName('td');
+        result.push({
+          start: this.formatTime(cols[0].innerHTML),
+          song: this.cleanString(cols[1].innerHTML),
+          now: !!cols[2]
+        });
+
+        this.$.list.classList.remove('hide');
+        this.$.message.classList.add('hide');
+      }
+      this.songHistory = result;
+      
+      this.currentSong = this.songHistory[0];
+      this.songHistory.shift();
+    }
+  },
+
+  _onSongListError: function (response){
+      this.$.list.classList.add('hide');
+      this.$.message.classList.remove('hide');
+  }
+});
+</script>
+</dom-module>
