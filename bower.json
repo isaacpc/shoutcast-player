@@ -1,6 +1,6 @@
 {
   "name": "shoutcast-player",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A shoutcast platorm player component",
   "authors": [
     "Isaac Palomino"
@@ -18,8 +18,7 @@
     "paper-slider": "PolymerElements/paper-slider#^1.0.0",
     "iron-image": "PolymerElements/iron-image#^1.2.5",
     "iron-icon": "PolymerElements/iron-icon#^1.0.0",
-    "iron-ajax": "PolymerElements/iron-ajax#^1.4.0",
-    "moment-element": "^0.4.3"
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
